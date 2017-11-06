@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String URL_PRODUCTS = "http://192.168.1.33/select_from_bc.php?bc=";
-    String currentBC="";
+    String currentBC = "";
     List<String> scannedBC = new ArrayList<>();
 
     List<Product> productList = new ArrayList<>();
@@ -57,8 +57,6 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         recyclerView = findViewById(R.id.recylcerView);
-        ProductAdapter adapter = new ProductAdapter(MainActivity.this, productList);
-        recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -106,6 +104,10 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_aggiungiprodotto) {
             Intent intent = new Intent(this, AggiungiProdotto.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.nav_ricercaprodotto) {
+            Intent intent = new Intent(this, RicercaProdotto.class);
             startActivity(intent);
         }
 

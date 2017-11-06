@@ -88,6 +88,10 @@ public class AggiungiProdotto extends AppCompatActivity
             Intent intent = new Intent(this, AggiungiProdotto.class);
             startActivity(intent);
         }
+        else if (id == R.id.nav_ricercaprodotto) {
+            Intent intent = new Intent(this, RicercaProdotto.class);
+            startActivity(intent);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

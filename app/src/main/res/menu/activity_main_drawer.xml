@@ -5,12 +5,16 @@
         <menu>
         <item
             android:id="@+id/nav_leggiBC"
-            android:icon="@drawable/ic_menu_leggibc"
+            android:icon="@drawable/ic_camera_black_24dp"
             android:title="Leggi codice a barre" />
         <item
             android:id="@+id/nav_aggiungiprodotto"
-            android:icon="@drawable/ic_menu_aggiungiprodotto"
+            android:icon="@drawable/ic_playlist_add_black_24dp"
             android:title="Aggiungi prodotto" />
+        <item
+            android:id="@+id/nav_ricercaprodotto"
+            android:icon="@drawable/ic_search_black_24dp"
+            android:title="Ricerca prodotto" />
         </menu>
     </item>
 </menu>

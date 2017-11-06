@@ -10,4 +10,7 @@
 
 
     <string name="action_settings">Settings</string>
+
+    <string name="search_title">Search</string>
+    <string name="search_hint">Inserisci nome prodotto</string>
 </resources>
