@@ -8,11 +8,16 @@
     android:layout_height="match_parent"
     tools:context="it.ale.barcodescanner.RicercaProdotto"
     android:fitsSystemWindows="true"
-    tools:openDrawer="end">
+    tools:openDrawer="start">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar">
+        </include>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recylcerView"

@@ -34,7 +34,7 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
-        <activity android:name=".RicercaProdotto" android:launchMode="singleTop">
+        <activity android:name=".RicercaProdotto" android:launchMode="singleTop" android:theme="@style/AppTheme.NoActionBar">>
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
                 <action android:name="android.intent.action.VIEW" />

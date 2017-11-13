@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,8 +13,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.SearchView;
 
 import com.android.volley.Request;
@@ -42,6 +45,13 @@ public class RicercaProdotto extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ricerca_prodotto);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -90,12 +100,16 @@ public class RicercaProdotto extends AppCompatActivity
         // Get Search item from action bar and Get Search service
         MenuItem searchItem = menu.findItem(R.id.search);
         SearchManager searchManager = (SearchManager) RicercaProdotto.this.getSystemService(Context.SEARCH_SERVICE);
+
         if (searchItem != null) {
             searchView = (SearchView) searchItem.getActionView();
         }
         if (searchView != null) {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(RicercaProdotto.this.getComponentName()));
-            searchView.setIconified(false);
+            final Point p = new Point();
+            getWindowManager().getDefaultDisplay().getSize(p);
+            searchView.setIconifiedByDefault(false);
+            searchView.setMaxWidth(p.x);
         }
 
         return true;
