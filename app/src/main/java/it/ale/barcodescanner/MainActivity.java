@@ -7,6 +7,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -31,7 +32,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String URL_PRODUCTS = "http://192.168.1.33/select_from_bc.php?bc=";
+    private static final String URL_PRODUCTS = "http://192.168.42.50/select_from_bc.php?bc=";
     String currentBC = "";
     List<String> scannedBC = new ArrayList<>();
 
@@ -59,6 +60,9 @@ public class MainActivity extends AppCompatActivity
         recyclerView = findViewById(R.id.recylcerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        DividerItemDecoration itemDecor = new DividerItemDecoration(this, 1);
+        recyclerView.addItemDecoration(itemDecor);
     }
 
     @Override
@@ -160,14 +164,13 @@ public class MainActivity extends AppCompatActivity
                                 JSONObject product = array.getJSONObject(i);
 
                                 //adding the product to product list
-                                productList.add(new Product(
+                                productList.add(0, new Product(
                                         product.getInt("id"),
                                         product.getString("bc"),
                                         product.getString("nome"),
                                         product.getDouble("prezzoa"),
                                         product.getDouble("prezzov"),
-                                        product.getString("marca"),
-                                        product.getInt("giacenza")
+                                        product.getString("marca")
                                 ));
                             }
                             //creating adapter object and setting it to recyclerview

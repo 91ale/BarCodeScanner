@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -28,15 +29,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public ProductViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mCtx);
         View view = inflater.inflate(R.layout.product_list, null);
+        RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        view.setLayoutParams(lp);
         return new ProductViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ProductViewHolder holder, int position) {
         Product product = productList.get(position);
+        DecimalFormat prezzovdec = new DecimalFormat("€ #.00");
 
-        holder.txtNomeProdotto.setText(product.getnome());
-        holder.txtPrezzoV.setText(String.valueOf(product.getprezzov()));
+        holder.txtNomeProdotto.setText(product.getmarca() + " " + product.getnome());
+        holder.txtPrezzoV.setText(prezzovdec.format(product.getprezzov()));
     }
 
     @Override

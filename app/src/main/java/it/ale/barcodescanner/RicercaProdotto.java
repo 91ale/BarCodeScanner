@@ -11,12 +11,12 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import android.widget.SearchView;
 
 import com.android.volley.Request;
@@ -35,7 +35,7 @@ import java.util.List;
 public class RicercaProdotto extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener  {
 
-    private static final String URL_PRODUCTS = "http://192.168.1.33/select_from_name.php?nome=";
+    private static final String URL_PRODUCTS = "http://192.168.42.50/select_from_name.php?nome=";
 
     List<Product> productList = new ArrayList<>();
     RecyclerView recyclerView;
@@ -65,6 +65,9 @@ public class RicercaProdotto extends AppCompatActivity
         recyclerView = findViewById(R.id.recylcerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        DividerItemDecoration itemDecor = new DividerItemDecoration(this, 1);
+        recyclerView.addItemDecoration(itemDecor);
 
     }
 
@@ -164,8 +167,7 @@ public class RicercaProdotto extends AppCompatActivity
                                         product.getString("nome"),
                                         product.getDouble("prezzoa"),
                                         product.getDouble("prezzov"),
-                                        product.getString("marca"),
-                                        product.getInt("giacenza")
+                                        product.getString("marca")
                                 ));
                             }
                             //creating adapter object and setting it to recyclerview

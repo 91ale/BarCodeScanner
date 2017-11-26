@@ -11,16 +11,14 @@ public class Product {
     private double prezzoa;
     private double prezzov;
     private String marca;
-    private int giacenza;
 
-    public Product(int id, String bc, String nome, double prezzoa, double prezzov, String marca, int giacenza) {
+    public Product(int id, String bc, String nome, double prezzoa, double prezzov, String marca) {
         this.id = id;
         this.bc = bc;
         this.nome = nome;
         this.prezzoa = prezzoa;
         this.prezzov = prezzov;
         this.marca = marca;
-        this.giacenza = giacenza;
     }
 
     public int getId() {
@@ -39,15 +37,10 @@ public class Product {
         return prezzoa;
     }
 
-    public double getprezzov() {
-        return prezzov;
-    }
+    public double getprezzov() { return prezzov; }
 
     public String getmarca() {
         return marca;
     }
 
-    public int getgiacenza() {
-        return giacenza;
-    }
 }

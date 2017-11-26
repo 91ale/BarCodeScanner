@@ -11,14 +11,14 @@
     tools:openDrawer="end">
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/txtNomeProdotto"
             android:layout_width="187dp"
-            android:layout_height="54dp"
+            android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:gravity="center"
@@ -27,26 +27,25 @@
             android:textSize="22sp"
             android:typeface="normal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/MarcaProdotto" />
 
         <EditText
             android:id="@+id/edtNomeProdotto"
             android:layout_width="0dp"
-            android:layout_height="54dp"
+            android:layout_height="48dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:ems="10"
             android:hint="Inserire il nome del prodotto"
             android:inputType="text"
+            app:layout_constraintBaseline_toBaselineOf="@+id/txtNomeProdotto"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/txtNomeProdotto"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/txtNomeProdotto" />
 
         <TextView
             android:id="@+id/txtPrezzoAcquisto"
             android:layout_width="187dp"
-            android:layout_height="54dp"
+            android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:gravity="center"
@@ -59,21 +58,20 @@
         <EditText
             android:id="@+id/edtPrezzoAcquisto"
             android:layout_width="0dp"
-            android:layout_height="54dp"
+            android:layout_height="48dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:ems="10"
             android:hint="Inserire il prezzo di acquisto del prodotto"
             android:inputType="numberDecimal"
+            app:layout_constraintBaseline_toBaselineOf="@+id/txtPrezzoAcquisto"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/txtPrezzoAcquisto"
-            app:layout_constraintTop_toBottomOf="@+id/edtNomeProdotto" />
+            app:layout_constraintStart_toEndOf="@+id/txtPrezzoAcquisto" />
 
         <TextView
             android:id="@+id/txtPrezzoVendita"
             android:layout_width="187dp"
-            android:layout_height="54dp"
+            android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:gravity="center"
@@ -86,21 +84,20 @@
         <EditText
             android:id="@+id/edtPrezzoVendita"
             android:layout_width="0dp"
-            android:layout_height="54dp"
+            android:layout_height="48dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:ems="10"
             android:hint="Inserire il prezzo di vendita del prodotto"
             android:inputType="numberDecimal"
+            app:layout_constraintBaseline_toBaselineOf="@+id/txtPrezzoVendita"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/txtPrezzoVendita"
-            app:layout_constraintTop_toBottomOf="@+id/edtPrezzoAcquisto" />
+            app:layout_constraintStart_toEndOf="@+id/txtPrezzoVendita" />
 
         <Button
             android:id="@+id/btnAggiungiProdotto"
             android:layout_width="0dp"
-            android:layout_height="68dp"
+            android:layout_height="60dp"
             android:layout_marginBottom="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
@@ -113,16 +110,44 @@
             android:id="@+id/txtBC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:textAlignment="center"
-            android:textSize="22sp"
+            android:layout_marginTop="8dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:textAlignment="center"
+            android:textSize="22sp"
             app:layout_constraintBottom_toTopOf="@+id/btnAggiungiProdotto"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edtPrezzoVendita" />
+
+        <TextView
+            android:id="@+id/MarcaProdotto"
+            android:layout_width="187dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="Marca Prodotto"
+            android:textSize="22sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/edtMarcaProdotto"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:ems="10"
+            android:hint="Inserire la marca del prodotto"
+            android:inputType="text"
+            app:layout_constraintBaseline_toBaselineOf="@+id/MarcaProdotto"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/MarcaProdotto" />
 
     </android.support.constraint.ConstraintLayout>
 
