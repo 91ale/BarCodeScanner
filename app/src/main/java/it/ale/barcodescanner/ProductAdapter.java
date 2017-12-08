@@ -1,10 +1,12 @@
 package it.ale.barcodescanner;
 
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
@@ -39,7 +41,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         Product product = productList.get(position);
         DecimalFormat prezzovdec = new DecimalFormat("€ #.00");
 
-        holder.txtNomeProdotto.setText(product.getmarca() + " " + product.getnome());
+        holder.txtNomeProdotto.setText(product.getmarca().toUpperCase() + " " + product.getnome().toUpperCase());
         holder.txtPrezzoV.setText(prezzovdec.format(product.getprezzov()));
     }
 
@@ -51,12 +53,30 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     class ProductViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtNomeProdotto, txtPrezzoV;
+        public RelativeLayout viewBackground;
+        public ConstraintLayout viewForeground;
 
         public ProductViewHolder(View itemView) {
             super(itemView);
 
             txtNomeProdotto = itemView.findViewById(R.id.txtNomeProdotto);
             txtPrezzoV = itemView.findViewById(R.id.txtPrezzoV);
+            viewBackground = itemView.findViewById(R.id.view_background);
+            viewForeground = itemView.findViewById(R.id.view_foreground);
         }
+    }
+
+    public void removeItem(int position) {
+        productList.remove(position);
+        // notify the item removed by position
+        // to perform recycler view delete animations
+        // NOTE: don't call notifyDataSetChanged()
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(Product item, int position) {
+        productList.add(position, item);
+        // notify item added by position
+        notifyItemInserted(position);
     }
 }

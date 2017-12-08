@@ -1,8 +1,10 @@
 package it.ale.barcodescanner;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,9 +13,13 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -30,7 +36,7 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     private static final String URL_PRODUCTS = "http://192.168.42.50/select_from_bc.php?bc=";
     String currentBC = "";
@@ -39,6 +45,9 @@ public class MainActivity extends AppCompatActivity
     List<Product> productList = new ArrayList<>();
 
     RecyclerView recyclerView;
+    ProductAdapter Padapter;
+    SearchView searchView = null;
+    private DrawerLayout drawerLayout;
 
 
     @Override
@@ -48,10 +57,10 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawerLayout = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+            this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -63,13 +72,16 @@ public class MainActivity extends AppCompatActivity
 
         DividerItemDecoration itemDecor = new DividerItemDecoration(this, 1);
         recyclerView.addItemDecoration(itemDecor);
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -115,9 +127,43 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /**
+     * callback when recycler view is swiped
+     * item will be removed on swiped
+     * undo option will be provided in snackbar to restore the item
+     */
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        if (viewHolder instanceof ProductAdapter.ProductViewHolder) {
+            // get the removed item name to display it in snack bar
+            String prodotto = productList.get(viewHolder.getAdapterPosition()).getmarca().toUpperCase() + " " + productList.get(viewHolder.getAdapterPosition()).getnome().toUpperCase() ;
+
+            // backup of removed item for undo purpose
+            final Product deletedItem = productList.get(viewHolder.getAdapterPosition());
+            final int deletedIndex = viewHolder.getAdapterPosition();
+
+            // remove the item from recycler view
+            Padapter.removeItem(viewHolder.getAdapterPosition());
+
+            // showing snack bar with Undo option
+            Snackbar snackbar = Snackbar
+                    .make(drawerLayout, prodotto + " è stato rimosso dalle scansioni", Snackbar.LENGTH_LONG);
+            snackbar.setAction("ANNULLA", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // undo is selected, restore the deleted item
+                    Padapter.restoreItem(deletedItem, deletedIndex);
+                }
+            });
+            snackbar.setActionTextColor(Color.YELLOW);
+            snackbar.show();
+        }
     }
 
     @Override
@@ -174,8 +220,9 @@ public class MainActivity extends AppCompatActivity
                                 ));
                             }
                             //creating adapter object and setting it to recyclerview
-                            ProductAdapter adapter = new ProductAdapter(MainActivity.this, productList);
-                            recyclerView.setAdapter(adapter);
+                            Padapter = new ProductAdapter(MainActivity.this, productList);
+                            recyclerView.setAdapter(Padapter);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

@@ -17,12 +17,12 @@
 
         <TextView
             android:id="@+id/txtNomeProdotto"
-            android:layout_width="187dp"
+            android:layout_width="102dp"
             android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="Nome Prodotto"
+            android:text="Nome"
             android:textAlignment="center"
             android:textSize="22sp"
             android:typeface="normal"
@@ -44,12 +44,12 @@
 
         <TextView
             android:id="@+id/txtPrezzoAcquisto"
-            android:layout_width="187dp"
+            android:layout_width="160dp"
             android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="Prezzo di acquisto"
+            android:text="Prezzo acquisto"
             android:textAlignment="center"
             android:textSize="22sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -70,12 +70,12 @@
 
         <TextView
             android:id="@+id/txtPrezzoVendita"
-            android:layout_width="187dp"
+            android:layout_width="160dp"
             android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="Prezzo di vendita"
+            android:text="Prezzo vendita"
             android:textAlignment="center"
             android:textSize="22sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -126,12 +126,12 @@
 
         <TextView
             android:id="@+id/MarcaProdotto"
-            android:layout_width="187dp"
+            android:layout_width="102dp"
             android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="Marca Prodotto"
+            android:text="Marca"
             android:textSize="22sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
