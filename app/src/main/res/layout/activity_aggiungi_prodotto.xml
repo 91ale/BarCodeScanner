@@ -16,89 +16,126 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/txtIVA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="76dp"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:text="IVA"
+            android:textSize="22sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/edtRicaricoProdotto"
+            android:layout_width="220dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:ems="10"
+            android:hint="% di ricarico"
+            android:inputType="number"
+            android:imeOptions="actionNext|flagNoExtractUi"
+            app:layout_constraintBaseline_toBaselineOf="@+id/txtRicaricoProdotto"
+            app:layout_constraintStart_toEndOf="@+id/txtRicaricoProdotto" />
+
+        <TextView
+            android:id="@+id/txtRicaricoProdotto"
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="Ricarico"
+            android:textAlignment="viewStart"
+            android:textSize="22sp"
+            android:imeOptions="actionNext|flagNoExtractUi"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtPrezzoVendita" />
+
+        <TextView
             android:id="@+id/txtNomeProdotto"
-            android:layout_width="102dp"
-            android:layout_height="48dp"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:text="Nome"
-            android:textAlignment="center"
+            android:textAlignment="viewStart"
             android:textSize="22sp"
             android:typeface="normal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/MarcaProdotto" />
+            app:layout_constraintTop_toBottomOf="@+id/txtMarcaProdotto" />
 
         <EditText
             android:id="@+id/edtNomeProdotto"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:ems="10"
-            android:hint="Inserire il nome del prodotto"
+            android:hint="Nome del prodotto"
             android:inputType="text"
+            android:imeOptions="actionNext|flagNoExtractUi"
             app:layout_constraintBaseline_toBaselineOf="@+id/txtNomeProdotto"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/txtNomeProdotto" />
 
         <TextView
             android:id="@+id/txtPrezzoAcquisto"
             android:layout_width="160dp"
-            android:layout_height="48dp"
+            android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:text="Prezzo acquisto"
-            android:textAlignment="center"
+            android:textAlignment="viewStart"
             android:textSize="22sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtNomeProdotto" />
 
         <EditText
             android:id="@+id/edtPrezzoAcquisto"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="220dp"
+            android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:ems="10"
-            android:hint="Inserire il prezzo di acquisto del prodotto"
+            android:hint="Prezzo di acquisto"
             android:inputType="numberDecimal"
+            android:digits="0123456789.,"
+            android:imeOptions="actionNext|flagNoExtractUi"
             app:layout_constraintBaseline_toBaselineOf="@+id/txtPrezzoAcquisto"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/txtPrezzoAcquisto" />
 
         <TextView
             android:id="@+id/txtPrezzoVendita"
             android:layout_width="160dp"
-            android:layout_height="48dp"
+            android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:text="Prezzo vendita"
-            android:textAlignment="center"
+            android:textAlignment="viewStart"
             android:textSize="22sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtPrezzoAcquisto" />
 
         <EditText
             android:id="@+id/edtPrezzoVendita"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="220dp"
+            android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:ems="10"
-            android:hint="Inserire il prezzo di vendita del prodotto"
+            android:hint="Prezzo di vendita"
             android:inputType="numberDecimal"
+            android:digits="0123456789.,"
+            android:imeOptions="actionNext|flagNoExtractUi"
             app:layout_constraintBaseline_toBaselineOf="@+id/txtPrezzoVendita"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/txtPrezzoVendita" />
 
         <Button
             android:id="@+id/btnAggiungiProdotto"
             android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="20dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
             android:text="AGGIUNGI PRODOTTO"
@@ -113,7 +150,6 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:textAlignment="center"
@@ -121,33 +157,63 @@
             app:layout_constraintBottom_toTopOf="@+id/btnAggiungiProdotto"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edtPrezzoVendita" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/MarcaProdotto"
-            android:layout_width="102dp"
-            android:layout_height="48dp"
+            android:id="@+id/txtMarcaProdotto"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:text="Marca"
+            android:textAlignment="viewStart"
             android:textSize="22sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/edtMarcaProdotto"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:ems="10"
-            android:hint="Inserire la marca del prodotto"
+            android:hint="Marca del prodotto"
             android:inputType="text"
-            app:layout_constraintBaseline_toBaselineOf="@+id/MarcaProdotto"
+            android:imeOptions="actionNext|flagNoExtractUi"
+            app:layout_constraintBaseline_toBaselineOf="@+id/txtMarcaProdotto"
+            app:layout_constraintStart_toEndOf="@+id/txtMarcaProdotto" />
+
+        <RadioGroup
+            android:id="@+id/rgrIVA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="64dp"
+            android:layout_marginTop="60dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/MarcaProdotto" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioButton
+                android:id="@+id/rbt4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="  4%" />
+
+            <RadioButton
+                android:id="@+id/rbt10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="10%" />
+
+            <RadioButton
+                android:id="@+id/rbt22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="22%" />
+        </RadioGroup>
 
     </android.support.constraint.ConstraintLayout>
 

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -28,6 +29,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class AggiungiProdotto extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener  {
@@ -37,12 +39,15 @@ public class AggiungiProdotto extends AppCompatActivity
     List<String> scannedBC = new ArrayList<>();
     String currentBC="";
     List<Product> productList = new ArrayList<>();
+    int IVA = 0;
 
     TextView txtBC;
     EditText edtMarcaProdotto;
     EditText edtNomeProdotto;
     EditText edtPrezzoAcquisto;
     EditText edtPrezzoVendita;
+    EditText edtRicaricoProdotto;
+    RadioGroup rgrIVA;
     int existBC = 0;
 
     @Override
@@ -66,9 +71,41 @@ public class AggiungiProdotto extends AppCompatActivity
         edtNomeProdotto = findViewById(R.id.edtNomeProdotto);
         edtPrezzoAcquisto = findViewById(R.id.edtPrezzoAcquisto);
         edtPrezzoVendita = findViewById(R.id.edtPrezzoVendita);
+        edtRicaricoProdotto = findViewById(R.id.edtRicaricoProdotto);
+        rgrIVA = findViewById(R.id.rgrIVA);
 
         txtBC = findViewById(R.id.txtBC);
         txtBC.requestFocus();
+
+        rgrIVA.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                float PrezzoAcquisto = 0;
+                float RicaricoProdotto = 0;
+                float PrezzoVendita = 0;
+
+                switch(checkedId){
+                    case R.id.rbt4:
+                        IVA = 4;
+                        break;
+                    case R.id.rbt10:
+                        IVA = 10;
+                        break;
+                    case R.id.rbt22:
+                        IVA = 22;
+                        break;
+                }
+
+                if ( !edtPrezzoAcquisto.getText().toString().equals("") && !edtRicaricoProdotto.getText().toString().equals("") )
+                {
+                    PrezzoAcquisto = Float.parseFloat(edtPrezzoAcquisto.getText().toString().replace(",","."));
+                    RicaricoProdotto = Float.parseFloat(edtRicaricoProdotto.getText().toString());
+                    PrezzoVendita = (PrezzoAcquisto * (100+RicaricoProdotto) / 100) * (100+IVA) / 100;
+                    edtPrezzoVendita.setText(String.format(Locale.ITALY, "%.2f", PrezzoVendita));
+                }
+            }
+        });
 
         btnAggiungiProdotto.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -156,8 +193,8 @@ public class AggiungiProdotto extends AppCompatActivity
                                 if (product.length()!=0) {
                                     edtMarcaProdotto.setText(product.getString("marca"));
                                     edtNomeProdotto.setText(product.getString("nome"));
-                                    edtPrezzoAcquisto.setText(product.getString("prezzoa"));
-                                    edtPrezzoVendita.setText(product.getString("prezzov"));
+                                    edtPrezzoAcquisto.setText(product.getString("prezzoa").replace(".",","));
+                                    edtPrezzoVendita.setText(product.getString("prezzov").replace(".",","));
                                     existBC = 1;
                                     Log.v("NOME_P",product.getString("nome"));
                                 }
@@ -188,6 +225,9 @@ public class AggiungiProdotto extends AppCompatActivity
         * Then we have a Response Listener and a Error Listener
         * In response listener we will get the JSON response as a String
         * */
+
+        PrezzoAcquisto = PrezzoAcquisto.replace(",",".");
+        PrezzoVendita = PrezzoVendita.replace(",",".");
 
         if (existBC==1)
         {
@@ -231,10 +271,14 @@ public class AggiungiProdotto extends AppCompatActivity
             Volley.newRequestQueue(this).add(stringRequestAdd);
         }
 
+        txtBC.setText("");
         edtMarcaProdotto.setText("");
         edtNomeProdotto.setText("");
         edtPrezzoAcquisto.setText("");
         edtPrezzoVendita.setText("");
+        edtRicaricoProdotto.setText("");
+        rgrIVA.clearCheck();
+        txtBC.requestFocus();
 
     }
 }
