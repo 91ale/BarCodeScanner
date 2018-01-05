@@ -6,7 +6,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 /**
- * Created by hale on 08/12/2017.
+ * Classe utilizzata per la gestione dello swipe degli oggetti della recycleview
  */
 
 public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {

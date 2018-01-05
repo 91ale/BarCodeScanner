@@ -13,11 +13,10 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 /**
- * Created by hale on 22/10/2017.
+ * Classe utilizzata per la gestione della recycleview e dei suoi elementi
  */
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
-
 
     private Context mCtx;
     private List<Product> productList;
@@ -27,6 +26,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         this.productList = productList;
     }
 
+
+    //impostazione layout della recycleview
     @Override
     public ProductViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mCtx);
@@ -36,6 +37,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         return new ProductViewHolder(view);
     }
 
+    //imposta il corretto formato di visualizzazione dei prezzi dei prodotti e visualizza in maiuscolo il nome e la marca dei prodotti nella recycleview
     @Override
     public void onBindViewHolder(ProductViewHolder holder, int position) {
         Product product = productList.get(position);
@@ -43,11 +45,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
         holder.txtNomeProdotto.setText(product.getmarca().toUpperCase() + " " + product.getnome().toUpperCase());
         holder.txtPrezzoV.setText(prezzovdec.format(product.getprezzov()));
-    }
-
-    @Override
-    public int getItemCount() {
-        return productList.size();
     }
 
     class ProductViewHolder extends RecyclerView.ViewHolder {
@@ -66,6 +63,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         }
     }
 
+    //restituisce la lunchezza della lista prodotti
+    @Override
+    public int getItemCount() {
+        return productList.size();
+    }
+
+    //rimuove l'oggetto nella posizione passate
     public void removeItem(int position) {
         productList.remove(position);
         // notify the item removed by position
@@ -74,6 +78,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         notifyItemRemoved(position);
     }
 
+    //ripristina l'oggetto nella posizione passata
     public void restoreItem(Product item, int position) {
         productList.add(position, item);
         // notify item added by position

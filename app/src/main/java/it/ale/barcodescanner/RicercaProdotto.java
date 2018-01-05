@@ -170,6 +170,7 @@ public class RicercaProdotto extends AppCompatActivity
             if (searchView != null) {
                 searchView.clearFocus();
             }
+            productList.clear();
             loadProducts(query);
         }
     }

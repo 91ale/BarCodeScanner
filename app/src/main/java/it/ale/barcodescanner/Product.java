@@ -1,8 +1,9 @@
 package it.ale.barcodescanner;
 
 /**
- * Created by hale on 22/10/2017.
+ * Classe contenente le informazioni relative ad 1 prodotto
  */
+
 
 public class Product {
     private int id;
@@ -11,6 +12,8 @@ public class Product {
     private double prezzoa;
     private double prezzov;
     private String marca;
+
+    //assegnazione valori agli attributi della classe (passati alla creazione della classe)
 
     public Product(int id, String bc, String nome, double prezzoa, double prezzov, String marca) {
         this.id = id;
@@ -21,6 +24,7 @@ public class Product {
         this.marca = marca;
     }
 
+    //metodi utilizzati per ottenere le info relative ad un prodotto specifico
     public int getId() {
         return id;
     }

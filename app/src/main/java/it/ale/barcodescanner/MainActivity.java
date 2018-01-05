@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -165,6 +166,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /*
+    * Quando viene premuto un tasto viene eseguito il metodo
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         //controlla se il carattere acquisito è quello di invio(66) (carattere di terminazione del BC)
@@ -179,7 +183,7 @@ public class MainActivity extends AppCompatActivity
         else {
             //converte il tasto premuto in Unicode
             char pressedKey = (char) event.getUnicodeChar();
-            //aggiunge la cifra alla variabile temp
+            //aggiunge la cifra alla variabile currentBC
             currentBC += pressedKey;
         }
         return true;
@@ -188,27 +192,26 @@ public class MainActivity extends AppCompatActivity
     private void loadProducts() {
 
         /*
-        * Creating a String Request
-        * The request type is GET defined by first parameter
-        * The URL is defined in the second parameter
-        * Then we have a Response Listener and a Error Listener
-        * In response listener we will get the JSON response as a String
-        * */
+        *Crea una string request
+        * la richiesta è di tipo GET
+        * L'URL della richiesta è definito nel secondo paramrtro
+        * nel response listener otteniamo la risposta JSON come stringa
+         */
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_PRODUCTS+scannedBC.remove(scannedBC.size()-1),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            //converting the string to json array object
+                            //converte la stringa in array JSON
                             JSONArray array = new JSONArray(response);
 
-                            //traversing through all the object
+                            //passa da tutti gli oggetti
                             for (int i = 0; i < array.length(); i++) {
 
-                                //getting product object from json array
+                                //prende il prodotto dall'array JSON
                                 JSONObject product = array.getJSONObject(i);
 
-                                //adding the product to product list
+                                //aggiunge il prodotto alla lista
                                 productList.add(0, new Product(
                                         product.getInt("id"),
                                         product.getString("bc"),
@@ -218,7 +221,7 @@ public class MainActivity extends AppCompatActivity
                                         product.getString("marca")
                                 ));
                             }
-                            //creating adapter object and setting it to recyclerview
+                            //crea l'adapter e lo assegna alla recycleview
                             Padapter = new ProductAdapter(MainActivity.this, productList);
                             recyclerView.setAdapter(Padapter);
 
@@ -234,7 +237,7 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
 
-        //adding our stringrequest to queue
+        //aggiunge la stringrequest alla coda
         Volley.newRequestQueue(this).add(stringRequest);
     }
 }
