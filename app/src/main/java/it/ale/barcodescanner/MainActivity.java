@@ -18,7 +18,9 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -30,6 +32,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,8 +48,12 @@ public class MainActivity extends AppCompatActivity
 
     RecyclerView recyclerView;
     ProductAdapter Padapter;
+    TextView txtPrezzoTotale;
     SearchView searchView = null;
     private DrawerLayout drawerLayout;
+
+    //formato di visulizzazione dei prezzi
+    DecimalFormat pdec = new DecimalFormat("€ 0.00");
 
 
     @Override
@@ -59,7 +66,7 @@ public class MainActivity extends AppCompatActivity
 
         drawerLayout = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-            this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -75,6 +82,10 @@ public class MainActivity extends AppCompatActivity
 
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
+
+        recyclerView.requestFocus();
+
+        txtPrezzoTotale = findViewById(R.id.txtPrezzoTotale);
     }
 
     @Override
@@ -102,7 +113,12 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.nuova_spesa) {
+            if (Padapter != null) {
+                Padapter.removeAllItem();
+                Padapter.notifyDataSetChanged();
+            }
+            txtPrezzoTotale.setText("");
             return true;
         }
 
@@ -140,15 +156,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof ProductAdapter.ProductViewHolder) {
-            // get the removed item name to display it in snack bar
+            // acquisisce il nome dell'oggetto eliminato per visualizzarlo sulla snackbar
             String prodotto = productList.get(viewHolder.getAdapterPosition()).getmarca().toUpperCase() + " " + productList.get(viewHolder.getAdapterPosition()).getnome().toUpperCase() ;
 
-            // backup of removed item for undo purpose
+            // backup dell'oggetto rimosso per un eventuale ripristino
             final Product deletedItem = productList.get(viewHolder.getAdapterPosition());
             final int deletedIndex = viewHolder.getAdapterPosition();
 
-            // remove the item from recycler view
+            // rimuove l'oggetto dalla recycler e dalla lista prodotti
             Padapter.removeItem(viewHolder.getAdapterPosition());
+            double totalespesa = Padapter.sumAllItem();
+            txtPrezzoTotale.setText(pdec.format(totalespesa));
 
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar
@@ -159,6 +177,8 @@ public class MainActivity extends AppCompatActivity
 
                     // undo is selected, restore the deleted item
                     Padapter.restoreItem(deletedItem, deletedIndex);
+                    double totalespesa = Padapter.sumAllItem();
+                    txtPrezzoTotale.setText(pdec.format(totalespesa));
                 }
             });
             snackbar.setActionTextColor(Color.YELLOW);
@@ -175,7 +195,7 @@ public class MainActivity extends AppCompatActivity
         if(keyCode==66) {
             //aggiunge il codice composto alla lista dei codici
             scannedBC.add(currentBC);
-            //varibile temp a null
+            //variabile temp a null
             currentBC="";
             //esegue la query condizionata dal BC scansionato
             loadProducts();
@@ -223,7 +243,10 @@ public class MainActivity extends AppCompatActivity
                             }
                             //crea l'adapter e lo assegna alla recycleview
                             Padapter = new ProductAdapter(MainActivity.this, productList);
+                            double totalespesa = Padapter.sumAllItem();
+                            txtPrezzoTotale.setText(pdec.format(totalespesa));
                             recyclerView.setAdapter(Padapter);
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();

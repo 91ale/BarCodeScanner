@@ -41,7 +41,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public void onBindViewHolder(ProductViewHolder holder, int position) {
         Product product = productList.get(position);
-        DecimalFormat prezzovdec = new DecimalFormat("€ #.00");
+        DecimalFormat prezzovdec = new DecimalFormat("€ 0.00");
 
         holder.txtNomeProdotto.setText(product.getmarca().toUpperCase() + " " + product.getnome().toUpperCase());
         holder.txtPrezzoV.setText(prezzovdec.format(product.getprezzov()));
@@ -84,4 +84,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         // notify item added by position
         notifyItemInserted(position);
     }
+
+    //rimuove tutti gli oggetti dalla lista
+    public void removeAllItem() {
+        productList.clear();
+    }
+
+    //restituisce la somma dei prezzi dei prodotti in lista
+    public double sumAllItem() {
+        int i;
+        double sum = 0;
+        for(i = 0; i < productList.size(); i++)
+            sum += productList.get(i).getprezzov();
+        return sum;
+    }
+
 }

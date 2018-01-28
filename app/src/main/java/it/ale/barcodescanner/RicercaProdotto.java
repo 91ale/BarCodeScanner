@@ -57,8 +57,6 @@ public class RicercaProdotto extends AppCompatActivity
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayShowHomeEnabled(false);
 
-
-
         drawerLayout = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -219,6 +217,7 @@ public class RicercaProdotto extends AppCompatActivity
                             //creating adapter object and setting it to recyclerview
                             Padapter = new ProductAdapter(RicercaProdotto.this, productList);
                             recyclerView.setAdapter(Padapter);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

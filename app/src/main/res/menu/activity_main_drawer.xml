@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Scegli opzione">
+    <item android:title="Scegli un'opzione">
         <menu>
         <item
             android:id="@+id/nav_leggiBC"
             android:icon="@drawable/ic_camera_black_24dp"
-            android:title="Leggi codice a barre" />
+            android:title="Inizia una spesa" />
         <item
             android:id="@+id/nav_aggiungiprodotto"
             android:icon="@drawable/ic_playlist_add_black_24dp"
-            android:title="Aggiungi prodotto" />
+            android:title="Aggiungi un prodotto" />
         <item
             android:id="@+id/nav_ricercaprodotto"
             android:icon="@drawable/ic_search_black_24dp"
-            android:title="Ricerca prodotto" />
+            android:title="Ricerca prodotto per nome" />
         </menu>
     </item>
 </menu>

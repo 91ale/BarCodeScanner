@@ -13,4 +13,5 @@
 
     <string name="search_title">Search</string>
     <string name="search_hint">Inserisci nome prodotto</string>
+    <string name="nuova_spesa">Nuova spesa</string>
 </resources>

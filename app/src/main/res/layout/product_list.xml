@@ -38,33 +38,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
-        android:padding="@dimen/padd_10">
+        android:padding="@dimen/padd_10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/txtNomeProdotto"
-            android:layout_width="wrap_content"
-            android:layout_height="80dp"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
             android:layout_alignBottom="@+id/txtPrezzoV"
+            android:layout_marginEnd="15dp"
             android:layout_marginStart="2dp"
+            android:gravity="center_vertical"
             android:text="Nome Prodotto"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:textColor="#000000"
             android:textSize="18sp"
-            android:gravity="center_vertical"
+            app:layout_constraintEnd_toStartOf="@+id/txtPrezzoV"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/txtPrezzoV"
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
+            android:layout_height="60dp"
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/txtNomeProdotto"
             android:layout_marginEnd="2dp"
+            android:gravity="center_vertical"
             android:text="EUR 99,99"
+            android:textAlignment="center"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textStyle="bold"
-            android:gravity="center_vertical"
             app:layout_constraintBaseline_toBaselineOf="@+id/txtNomeProdotto"
             app:layout_constraintEnd_toEndOf="parent" />
 
