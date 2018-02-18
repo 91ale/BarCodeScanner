@@ -18,7 +18,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -27,10 +26,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -42,7 +37,6 @@ public class MainActivity extends AppCompatActivity
 
     private static final String URL_PRODUCTS = "http://192.168.42.50/select_from_bc.php?bc=";
     String currentBC = "";
-    List<String> scannedBC = new ArrayList<>();
 
     List<Product> productList = new ArrayList<>();
 
@@ -50,11 +44,9 @@ public class MainActivity extends AppCompatActivity
     ProductAdapter Padapter;
     TextView txtPrezzoTotale;
     SearchView searchView = null;
-    private DrawerLayout drawerLayout;
-
     //formato di visulizzazione dei prezzi
     DecimalFormat pdec = new DecimalFormat("€ 0.00");
-
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,11 +58,11 @@ public class MainActivity extends AppCompatActivity
 
         drawerLayout = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-            this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         recyclerView = findViewById(R.id.recylcerView);
@@ -137,8 +129,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_aggiungiprodotto) {
             Intent intent = new Intent(this, AggiungiProdotto.class);
             startActivity(intent);
-        }
-        else if (id == R.id.nav_ricercaprodotto) {
+        } else if (id == R.id.nav_ricercaprodotto) {
             Intent intent = new Intent(this, RicercaProdotto.class);
             startActivity(intent);
         }
@@ -157,7 +148,7 @@ public class MainActivity extends AppCompatActivity
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof ProductAdapter.ProductViewHolder) {
             // acquisisce il nome dell'oggetto eliminato per visualizzarlo sulla snackbar
-            String prodotto = productList.get(viewHolder.getAdapterPosition()).getmarca().toUpperCase() + " " + productList.get(viewHolder.getAdapterPosition()).getnome().toUpperCase() ;
+            String prodotto = productList.get(viewHolder.getAdapterPosition()).getmarca().toUpperCase() + " " + productList.get(viewHolder.getAdapterPosition()).getnome().toUpperCase();
 
             // backup dell'oggetto rimosso per un eventuale ripristino
             final Product deletedItem = productList.get(viewHolder.getAdapterPosition());
@@ -192,15 +183,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         //controlla se il carattere acquisito è quello di invio(66) (carattere di terminazione del BC)
-        if(keyCode==66) {
-            //aggiunge il codice composto alla lista dei codici
-            scannedBC.add(currentBC);
-            //variabile temp a null
-            currentBC="";
+        if (keyCode == 66) {
             //esegue la query condizionata dal BC scansionato
-            loadProducts();
-        }
-        else {
+            sendRequest();
+            //variabile temp a null
+            currentBC = "";
+        } else {
             //converte il tasto premuto in Unicode
             char pressedKey = (char) event.getUnicodeChar();
             //aggiunge la cifra alla variabile currentBC
@@ -209,48 +197,19 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void loadProducts() {
-
-        /*
-        *Crea una string request
-        * la richiesta è di tipo GET
-        * L'URL della richiesta è definito nel secondo paramrtro
-        * nel response listener otteniamo la risposta JSON come stringa
-         */
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_PRODUCTS+scannedBC.remove(scannedBC.size()-1),
+    private void sendRequest() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_PRODUCTS + currentBC/*scannedBC.remove(scannedBC.size() - 1)*/,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        try {
-                            //converte la stringa in array JSON
-                            JSONArray array = new JSONArray(response);
-
-                            //passa da tutti gli oggetti
-                            for (int i = 0; i < array.length(); i++) {
-
-                                //prende il prodotto dall'array JSON
-                                JSONObject product = array.getJSONObject(i);
-
-                                //aggiunge il prodotto alla lista
-                                productList.add(0, new Product(
-                                        product.getInt("id"),
-                                        product.getString("bc"),
-                                        product.getString("nome"),
-                                        product.getDouble("prezzoa"),
-                                        product.getDouble("prezzov"),
-                                        product.getString("marca")
-                                ));
-                            }
-                            //crea l'adapter e lo assegna alla recycleview
-                            Padapter = new ProductAdapter(MainActivity.this, productList);
-                            double totalespesa = Padapter.sumAllItem();
-                            txtPrezzoTotale.setText(pdec.format(totalespesa));
-                            recyclerView.setAdapter(Padapter);
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        ParseJSON pj = new ParseJSON(response);
+                        pj.parseJSON();
+                        productList.addAll(pj.getProduct());
+                        //crea l'adapter e lo assegna alla recycleview
+                        Padapter = new ProductAdapter(MainActivity.this, productList);
+                        double totalespesa = Padapter.sumAllItem();
+                        txtPrezzoTotale.setText(pdec.format(totalespesa));
+                        recyclerView.setAdapter(Padapter);
                     }
                 },
                 new Response.ErrorListener() {
@@ -263,4 +222,5 @@ public class MainActivity extends AppCompatActivity
         //aggiunge la stringrequest alla coda
         Volley.newRequestQueue(this).add(stringRequest);
     }
+
 }

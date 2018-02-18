@@ -63,7 +63,7 @@ public class RicercaProdotto extends AppCompatActivity
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         recyclerView = findViewById(R.id.recylcerView);
@@ -90,8 +90,7 @@ public class RicercaProdotto extends AppCompatActivity
         } else if (id == R.id.nav_aggiungiprodotto) {
             Intent intent = new Intent(this, AggiungiProdotto.class);
             startActivity(intent);
-        }
-        else if (id == R.id.nav_ricercaprodotto) {
+        } else if (id == R.id.nav_ricercaprodotto) {
             Intent intent = new Intent(this, RicercaProdotto.class);
             startActivity(intent);
         }
@@ -110,7 +109,7 @@ public class RicercaProdotto extends AppCompatActivity
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof ProductAdapter.ProductViewHolder) {
             // get the removed item name to display it in snack bar
-            String prodotto = productList.get(viewHolder.getAdapterPosition()).getmarca().toUpperCase() + " " + productList.get(viewHolder.getAdapterPosition()).getnome().toUpperCase() ;
+            String prodotto = productList.get(viewHolder.getAdapterPosition()).getmarca().toUpperCase() + " " + productList.get(viewHolder.getAdapterPosition()).getnome().toUpperCase();
 
             // backup of removed item for undo purpose
             final Product deletedItem = productList.get(viewHolder.getAdapterPosition());
@@ -169,19 +168,11 @@ public class RicercaProdotto extends AppCompatActivity
                 searchView.clearFocus();
             }
             productList.clear();
-            loadProducts(query);
+            sendRequest(query);
         }
     }
 
-    private void loadProducts(String query) {
-
-        /*
-        * Creating a String Request
-        * The request type is GET defined by first parameter
-        * The URL is defined in the second parameter
-        * Then we have a Response Listener and a Error Listener
-        * In response listener we will get the JSON response as a String
-        * */
+    private void sendRequest(String query) {
 
         ProgressDialog pdLoading = new ProgressDialog(RicercaProdotto.this);
         pdLoading.setMessage("\tLoading...");
@@ -190,37 +181,15 @@ public class RicercaProdotto extends AppCompatActivity
 
         query = query.replaceAll(" ", "%20");
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_PRODUCTS+query,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_PRODUCTS + query,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        try {
-                            //converting the string to json array object
-                            JSONArray array = new JSONArray(response);
-
-                            //traversing through all the object
-                            for (int i = 0; i < array.length(); i++) {
-
-                                //getting product object from json array
-                                JSONObject product = array.getJSONObject(i);
-
-                                //adding the product to product list
-                                productList.add(new Product(
-                                        product.getInt("id"),
-                                        product.getString("bc"),
-                                        product.getString("nome"),
-                                        product.getDouble("prezzoa"),
-                                        product.getDouble("prezzov"),
-                                        product.getString("marca")
-                                ));
-                            }
-                            //creating adapter object and setting it to recyclerview
-                            Padapter = new ProductAdapter(RicercaProdotto.this, productList);
-                            recyclerView.setAdapter(Padapter);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        ParseJSON pj = new ParseJSON(response);
+                        pj.parseJSON();
+                        productList.addAll(pj.getProduct());
+                        Padapter = new ProductAdapter(RicercaProdotto.this, productList);
+                        recyclerView.setAdapter(Padapter);
                     }
                 },
                 new Response.ErrorListener() {
@@ -234,4 +203,5 @@ public class RicercaProdotto extends AppCompatActivity
         Volley.newRequestQueue(this).add(stringRequest);
         pdLoading.dismiss();
     }
+
 }
