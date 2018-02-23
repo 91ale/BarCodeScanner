@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onResponse(String response) {
                         ParseJSON pj = new ParseJSON(response);
-                        pj.parseJSON();
+                        pj.getProductFromDB();
                         productList.addAll(pj.getProduct());
                         //crea l'adapter e lo assegna alla recycleview
                         Padapter = new ProductAdapter(MainActivity.this, productList);

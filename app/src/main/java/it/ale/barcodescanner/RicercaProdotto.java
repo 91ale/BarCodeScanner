@@ -29,10 +29,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -186,7 +182,7 @@ public class RicercaProdotto extends AppCompatActivity
                     @Override
                     public void onResponse(String response) {
                         ParseJSON pj = new ParseJSON(response);
-                        pj.parseJSON();
+                        pj.getProductFromDB();
                         productList.addAll(pj.getProduct());
                         Padapter = new ProductAdapter(RicercaProdotto.this, productList);
                         recyclerView.setAdapter(Padapter);

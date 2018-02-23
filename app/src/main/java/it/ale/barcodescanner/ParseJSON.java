@@ -19,7 +19,8 @@ public class ParseJSON {
         this.json = json;
     }
 
-    protected void parseJSON() {
+
+    protected void getProductFromDB() {
 
         try {
             //converte la stringa in array JSON

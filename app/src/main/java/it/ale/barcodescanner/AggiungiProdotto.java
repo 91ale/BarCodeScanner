@@ -8,7 +8,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,25 +22,19 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.text.DecimalFormat;
 import java.util.Locale;
 
 public class AggiungiProdotto extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener  {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String URL_PRODUCTS_INSERT = "http://192.168.42.50/insert.php?";
-    private static final String URL_PRODUCTS_SELECT = "http://192.168.42.50/select_from_bc.php?bc=";
-    List<String> scannedBC = new ArrayList<>();
-    String currentBC="";
-    List<Product> productList = new ArrayList<>();
+    //private static final String URL_PRODUCTS_INSERT = "http://192.168.42.50/insert.php?";
+    //private static final String URL_PRODUCTS_SELECT = "http://192.168.42.50/select_from_bc.php?bc=";
+    private static final String URL_PRODUCTS_INSERT = "http://192.168.1.33/insert.php?";
+    private static final String URL_PRODUCTS_SELECT = "http://192.168.1.33/select_from_bc.php?bc=";
+    Product prodottocorrente;
+    String currentBC = "";
     int IVA = 0;
-    private DrawerLayout drawerLayout;
-
     TextView txtBC;
     EditText edtMarcaProdotto;
     EditText edtNomeProdotto;
@@ -50,6 +43,7 @@ public class AggiungiProdotto extends AppCompatActivity
     EditText edtRicaricoProdotto;
     RadioGroup rgrIVA;
     int existBC = 0;
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,15 +73,14 @@ public class AggiungiProdotto extends AppCompatActivity
         txtBC = findViewById(R.id.txtBC);
         txtBC.requestFocus();
 
-        rgrIVA.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
+        rgrIVA.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
                 float PrezzoAcquisto = 0;
                 float RicaricoProdotto = 0;
                 float PrezzoVendita = 0;
 
-                switch(checkedId){
+                switch (checkedId) {
                     case R.id.rbt4:
                         IVA = 4;
                         break;
@@ -99,11 +92,10 @@ public class AggiungiProdotto extends AppCompatActivity
                         break;
                 }
 
-                if ( !edtPrezzoAcquisto.getText().toString().equals("") && !edtRicaricoProdotto.getText().toString().equals("") )
-                {
-                    PrezzoAcquisto = Float.parseFloat(edtPrezzoAcquisto.getText().toString().replace(",","."));
+                if (!edtPrezzoAcquisto.getText().toString().equals("") && !edtRicaricoProdotto.getText().toString().equals("")) {
+                    PrezzoAcquisto = Float.parseFloat(edtPrezzoAcquisto.getText().toString().replace(",", "."));
                     RicaricoProdotto = Float.parseFloat(edtRicaricoProdotto.getText().toString());
-                    PrezzoVendita = (PrezzoAcquisto * (100+RicaricoProdotto) / 100) * (100+IVA) / 100;
+                    PrezzoVendita = (PrezzoAcquisto * (100 + RicaricoProdotto) / 100) * (100 + IVA) / 100;
                     edtPrezzoVendita.setText(String.format(Locale.ITALY, "%.2f", PrezzoVendita));
                 }
             }
@@ -115,7 +107,8 @@ public class AggiungiProdotto extends AppCompatActivity
                 final String NomeProdotto = edtNomeProdotto.getText().toString();
                 final String PrezzoAcquisto = edtPrezzoAcquisto.getText().toString();
                 final String PrezzoVendita = edtPrezzoVendita.getText().toString();
-                loadProducts(NomeProdotto,PrezzoAcquisto,PrezzoVendita,MarcaProdotto);
+                loadProducts(NomeProdotto, PrezzoAcquisto, PrezzoVendita, MarcaProdotto);
+                resetCampi();
             }
         });
 
@@ -129,12 +122,10 @@ public class AggiungiProdotto extends AppCompatActivity
         if (id == R.id.nav_leggiBC) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-
         } else if (id == R.id.nav_aggiungiprodotto) {
             Intent intent = new Intent(this, AggiungiProdotto.class);
             startActivity(intent);
-        }
-        else if (id == R.id.nav_ricercaprodotto) {
+        } else if (id == R.id.nav_ricercaprodotto) {
             Intent intent = new Intent(this, RicercaProdotto.class);
             startActivity(intent);
         }
@@ -147,17 +138,14 @@ public class AggiungiProdotto extends AppCompatActivity
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         //controlla se il carattere acquisito è quello di invio(66) (carattere di terminazione del BC)
-        if(keyCode==66) {
-            //aggiunge il codice composto alla lista dei codici
-            scannedBC.add(currentBC);
-            //varibile temp a null
-            currentBC="";
+        if (keyCode == 66) {
             //esegue la query condizionata dal BC scansionato
-            txtBC.setText(scannedBC.get(scannedBC.size()-1));
-            existBC = 0;
+            txtBC.setText(currentBC);
+            //se il prodotto scansionato è presente nel DB recupera i dati relativi e valorizza di conseguenza le textbox
             checkExist();
-        }
-        else {
+            //varibile temp a null
+            currentBC = "";
+        } else {
             //converte il tasto premuto in Unicode
             char pressedKey = (char) event.getUnicodeChar();
             //aggiunge la n-esima cifra del BC alla variabile temporanea
@@ -168,42 +156,22 @@ public class AggiungiProdotto extends AppCompatActivity
 
     private void checkExist() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_PRODUCTS_SELECT+scannedBC.get(scannedBC.size()-1),
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_PRODUCTS_SELECT + currentBC,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        try {
-                            //converting the string to json array object
-                            JSONArray array = new JSONArray(response);
-
-                            //traversing through all the object
-                            for (int i = 0; i < array.length(); i++) {
-
-                                //getting product object from json array
-                                JSONObject product = array.getJSONObject(i);
-
-                                //adding the product to product list
-                                productList.add(new Product(
-                                        product.getInt("id"),
-                                        product.getString("bc"),
-                                        product.getString("nome"),
-                                        product.getDouble("prezzoa"),
-                                        product.getDouble("prezzov"),
-                                        product.getString("marca")
-                                ));
-
-                                if (product.length()!=0) {
-                                    edtMarcaProdotto.setText(product.getString("marca"));
-                                    edtNomeProdotto.setText(product.getString("nome"));
-                                    edtPrezzoAcquisto.setText(product.getString("prezzoa").replace(".",","));
-                                    edtPrezzoVendita.setText(product.getString("prezzov").replace(".",","));
-                                    existBC = 1;
-                                    Log.v("NOME_P",product.getString("nome"));
-                                }
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        ParseJSON pj = new ParseJSON(response);
+                        pj.getProductFromDB();
+                        prodottocorrente = pj.getProduct().get(0);
+                        //se il prodotto corrispondente al codice scansionato è già presente nel DB valorizza le textview con i dati presenti nel DB
+                        if (pj.getProduct().size() != 0) {
+                            DecimalFormat prezzodec = new DecimalFormat("0.00");
+                            edtMarcaProdotto.setText(prodottocorrente.getmarca());
+                            edtNomeProdotto.setText(prodottocorrente.getnome());
+                            edtPrezzoAcquisto.setText(prezzodec.format(prodottocorrente.getprezzoa()).replace(".", ","));
+                            edtPrezzoVendita.setText(prezzodec.format(prodottocorrente.getprezzov()).replace(".", ","));
+                            prodottocorrente = pj.getProduct().get(0);
+                            existBC = 1;
                         }
                     }
                 },
@@ -218,6 +186,17 @@ public class AggiungiProdotto extends AppCompatActivity
         Volley.newRequestQueue(this).add(stringRequest);
     }
 
+    private void resetCampi() {
+        txtBC.setText("");
+        edtMarcaProdotto.setText("");
+        edtNomeProdotto.setText("");
+        edtPrezzoAcquisto.setText("");
+        edtPrezzoVendita.setText("");
+        edtRicaricoProdotto.setText("");
+        rgrIVA.clearCheck();
+        txtBC.requestFocus();
+    }
+
     private void loadProducts(String NomeProdotto, String PrezzoAcquisto, String PrezzoVendita, String MarcaProdotto) {
 
         /*
@@ -228,59 +207,35 @@ public class AggiungiProdotto extends AppCompatActivity
         * In response listener we will get the JSON response as a String
         * */
 
-        PrezzoAcquisto = PrezzoAcquisto.replace(",",".");
-        PrezzoVendita = PrezzoVendita.replace(",",".");
+        String queryurl;
+        PrezzoAcquisto = PrezzoAcquisto.replace(",", ".");
+        PrezzoVendita = PrezzoVendita.replace(",", ".");
 
-        if (existBC==1)
-        {
-            StringRequest stringRequestAdd = new StringRequest(Request.Method.GET, URL_PRODUCTS_INSERT+"id="+productList.get(productList.size()-1).getId()+"&"+"bc="+scannedBC.get(scannedBC.size()-1)+"&"+"nome="+NomeProdotto+"&"+"prezzoa="+PrezzoAcquisto+"&"+"prezzov="+PrezzoVendita+"&"+"marca="+MarcaProdotto,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
+        if (existBC == 1) {
+            queryurl = URL_PRODUCTS_INSERT + "id=" + prodottocorrente.getId() + "&" + "bc=" + currentBC + "&" + "nome=" + NomeProdotto + "&" + "prezzoa=" + PrezzoAcquisto + "&" + "prezzov=" + PrezzoVendita + "&" + "marca=" + MarcaProdotto;
 
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-
-                        }
-                    });
-
-            //adding our stringrequest to queue
-            Volley.newRequestQueue(this).add(stringRequestAdd);
-
-            productList.remove(productList.size()-1);
-            existBC=0;
-        }
-        else
-        {
-            StringRequest stringRequestAdd = new StringRequest(Request.Method.GET, URL_PRODUCTS_INSERT+"bc="+scannedBC.get(scannedBC.size()-1)+"&"+"nome="+NomeProdotto+"&"+"prezzoa="+PrezzoAcquisto+"&"+"prezzov="+PrezzoVendita+"&"+"marca="+MarcaProdotto,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-
-                        }
-                    });
-
-            //adding our stringrequest to queue
-            Volley.newRequestQueue(this).add(stringRequestAdd);
+            //azzera la variabile che identifica se il prodotto scansionato esiste già nel DB
+            existBC = 0;
+        } else {
+            queryurl = URL_PRODUCTS_INSERT + "bc=" + currentBC + "&" + "nome=" + NomeProdotto + "&" + "prezzoa=" + PrezzoAcquisto + "&" + "prezzov=" + PrezzoVendita + "&" + "marca=" + MarcaProdotto;
         }
 
-        txtBC.setText("");
-        edtMarcaProdotto.setText("");
-        edtNomeProdotto.setText("");
-        edtPrezzoAcquisto.setText("");
-        edtPrezzoVendita.setText("");
-        edtRicaricoProdotto.setText("");
-        rgrIVA.clearCheck();
-        txtBC.requestFocus();
+        StringRequest stringRequestAdd = new StringRequest(Request.Method.GET, queryurl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
 
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+
+        //adding our stringrequest to queue
+        Volley.newRequestQueue(this).add(stringRequestAdd);
     }
+
 }
