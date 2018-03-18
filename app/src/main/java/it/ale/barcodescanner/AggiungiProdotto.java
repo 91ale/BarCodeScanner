@@ -28,10 +28,10 @@ import java.util.Locale;
 public class AggiungiProdotto extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    //private static final String URL_PRODUCTS_INSERT = "http://192.168.42.50/insert.php?";
-    //private static final String URL_PRODUCTS_SELECT = "http://192.168.42.50/select_from_bc.php?bc=";
-    private static final String URL_PRODUCTS_INSERT = "http://192.168.1.33/insert.php?";
-    private static final String URL_PRODUCTS_SELECT = "http://192.168.1.33/select_from_bc.php?bc=";
+    private static final String URL_PRODUCTS_INSERT = "http://192.168.42.50/insert.php?";
+    private static final String URL_PRODUCTS_SELECT = "http://192.168.42.50/select_from_bc.php?bc=";
+    //private static final String URL_PRODUCTS_INSERT = "http://192.168.1.33/insert.php?";
+    //private static final String URL_PRODUCTS_SELECT = "http://192.168.1.33/select_from_bc.php?bc=";
     Product prodottocorrente;
     String currentBC = "";
     int IVA = 0;
